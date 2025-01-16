@@ -31,6 +31,8 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      opacity: 1;
+      transition: opacity 0.5s ease;
     }
 
     img.logo {
@@ -76,6 +78,8 @@
     .delivery-animation {
       display: none;
       text-align: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
     }
 
     .delivery-animation img {
@@ -147,7 +151,6 @@
       100% { box-shadow: 0 0 5px #e74c3c; }
     }
 
-    /* Glowing Link */
     .google-form {
       color: #f39c12;
       text-decoration: none;
@@ -283,8 +286,17 @@
         return;
       }
 
-      document.getElementById('mainContainer').style.display = 'none';
-      document.getElementById('deliveryAnimation').style.display = 'block';
+      // Fade-out transition for main container
+      document.getElementById('mainContainer').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('mainContainer').style.display = 'none';
+        document.getElementById('deliveryAnimation').style.display = 'block';
+
+        // Fade-in transition for delivery animation
+        setTimeout(() => {
+          document.getElementById('deliveryAnimation').style.opacity = 1;
+        }, 50); // Short delay for smooth transition
+      }, 500);
 
       document.getElementById('summaryDetails').innerHTML = `
         <p><strong>Amount Requested:</strong> ₹${amount}</p>
@@ -295,6 +307,7 @@
     function cancelDelivery() {
       featureIndex = (featureIndex + 1) % features.length;
 
+      // Change the features displayed after canceling
       const featureBox = document.getElementById('featureBox');
       featureBox.innerHTML = features[featureIndex].map(feature => `
         <div class="box">
@@ -303,8 +316,18 @@
         </div>
       `).join('');
 
-      document.getElementById('mainContainer').style.display = 'block';
-      document.getElementById('deliveryAnimation').style.display = 'none';
+      // Fade-out transition for delivery page
+      document.getElementById('deliveryAnimation').style.opacity = 0;
+      setTimeout(() => {
+        document.getElementById('deliveryAnimation').style.display = 'none';
+        document.getElementById('mainContainer').style.display = 'block';
+
+        // Fade-in transition for main page
+        setTimeout(() => {
+          document.getElementById('mainContainer').style.opacity = 1;
+        }, 50); // Short delay for smooth transition
+      }, 500);
+
       hidePopup();
     }
 
